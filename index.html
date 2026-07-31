@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>to do list</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To Do List</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>안녕하세요</h1>
+  <div class="container">
+    <h1>To Do List</h1>
 
-    <button id="btn">클릭</button>
-    <p>기능 A 추가</p>
-    <script src="script.js"></script>
+    <div class="input-area">
+      <input
+        type="text"
+        id="todoInput"
+        placeholder="내가 해야하는 일"
+      >
+      <button id="addBtn">추가</button>
+    </div>
 
+    <ul id="todoList"></ul>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
