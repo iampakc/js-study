@@ -1,39 +1,58 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+const input = document.getElementById("todoInput");
+const addBtn = document.getElementById("addBtn");
+const todoList = document.getElementById("todoList");
+
+
+// 할 일 추가 함수
+function addTodo() {
+
+  const todoText = input.value.trim();
+
+
+  // 빈 입력 방지
+  if (todoText === "") {
+    return;
+  }
+
+
+  // li 생성
+  const li = document.createElement("li");
+
+  li.innerHTML = `
+    <span>${todoText}</span>
+    <button class="delete-btn">삭제</button>
+  `;
+
+
+  // 삭제 버튼 기능
+  const deleteBtn = li.querySelector(".delete-btn");
+
+  deleteBtn.addEventListener("click", function() {
+    li.remove();
+  });
+
+
+  // 리스트에 추가
+  todoList.appendChild(li);
+
+
+  // 입력창 초기화
+  input.value = "";
+
+  input.focus();
 }
 
-.container {
-    width: 400px;
-    margin: 50px auto;
-    text-align: center;
-}
 
-.input-area {
-    display: flex;
-    gap: 10px;
-}
 
-input {
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-}
+// 추가 버튼 클릭
+addBtn.addEventListener("click", addTodo);
 
-button {
-    padding: 10px 15px;
-    cursor: pointer;
-}
 
-ul {
-    margin-top: 20px;
-    padding: 0;
-}
+// Enter 키로 추가
+input.addEventListener("keydown", function(event) {
 
-li {
-    list-style: none;
-    background: white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-}
+  if (event.key === "Enter") {
+    addTodo();
+  }
+
+});
