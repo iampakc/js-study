@@ -1,35 +1,54 @@
 <!DOCTYPE html>
+<!-- HTML5 문서라는 것을 브라우저에 알려줍니다. -->
+
 <html lang="ko">
+<!-- 웹페이지의 언어를 한국어로 설정합니다. -->
+
 <head>
+  <!-- 웹페이지의 정보를 담는 부분입니다. -->
+
   <meta charset="UTF-8">
+  <!-- 한글이 깨지지 않도록 문자 인코딩을 UTF-8로 설정합니다. -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 스마트폰에서도 화면 크기에 맞게 표시됩니다. -->
+
   <title>To Do List</title>
+  <!-- 브라우저 탭에 표시되는 제목입니다. -->
+
   <link rel="stylesheet" href="style.css">
+  <!-- style.css 파일을 연결합니다. -->
 </head>
 
 <body>
 
+  <!-- 전체 To Do List를 감싸는 영역 -->
   <div class="container">
 
+    <!-- 제목 -->
     <h1>To Do List</h1>
 
+    <!-- 입력창과 버튼 영역 -->
     <div class="input-area">
-      <input 
-        type="text" 
-        id="todoInput" 
-        placeholder="할 일을 입력하세요"
-      >
 
+      <!-- 할 일을 입력하는 칸 -->
+      <input
+        type="text"
+        id="todoInput"
+        placeholder="할 일을 입력하세요">
+
+      <!-- 할 일을 추가하는 버튼 -->
       <button id="addBtn">추가</button>
+
     </div>
 
-
+    <!-- 할 일이 추가될 목록 -->
     <ul id="todoList"></ul>
 
   </div>
 
-
-<script src="script.js"></script>
+  <!-- JavaScript 파일 연결 -->
+  <script src="script.js"></script>
 
 </body>
 </html>
