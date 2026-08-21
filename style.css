@@ -145,3 +145,14 @@ li{
     padding:5px 10px;
 
 }
+
+li {
+  cursor: grab;
+  /* 할 일을 드래그할 수 있다는 것을 보여주는 마우스 모양입니다. */
+}
+
+
+li:active {
+  cursor: grabbing;
+  /* 할 일을 실제로 잡고 드래그할 때의 마우스 모양입니다. */
+}
