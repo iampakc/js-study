@@ -24,7 +24,7 @@ body{
 /* 흰색 박스 */
 .container{
 
-    background:rgb(255, 255, 255);
+    background:white;
     /* 배경 */
 
     width:350px;
@@ -147,6 +147,18 @@ li{
 }
 
 li {
+    cursor: grab;
+    transition: left 0.15s ease, top 0.15s ease;
+}
+
+li:active {
+    cursor: grabbing;
+}
+
+li {
+    padding: 10px;
+    margin: 5px;
+    background: white;
     cursor: grab;
     transition: left 0.15s ease, top 0.15s ease;
 }
