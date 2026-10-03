@@ -1,33 +1,34 @@
 const input = document.getElementById("todoInput");
-// html에서 "todoinput"이라는 할 일을 입력하는 input 요소를 가져옴
+// 할 일을 입력하는 input 요소를 가져옵니다.
 
 const addBtn = document.getElementById("addBtn");
-// html에서 "addBtn"이라는 추가 버튼 요소를 가져옴
+// 추가 버튼을 가져옵니다.
 
 const todoList = document.getElementById("todoList");
-// html에서 "todolist"이라는 할 일 목록인 ul 요소를 가져옴
+// 할 일 목록인 ul 요소를 가져옵니다.
 
 
-// todos라는 변수를 만들고 할 일들을 배열로 저장함 
-// localStorage에 저장된 할 일을 가져옴
-// 저장된 값이 없으면 빈 배열을 사용함
+// localStorage에 저장된 할 일을 가져옵니다.
+// 저장된 값이 없으면 빈 배열을 사용합니다.
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
+
 // 할 일 목록을 화면에 표시하는 함수
-function displayTodos(){
+function displayTodos() {
 
     // 기존 목록을 모두 삭제합니다.
     todoList.innerHTML = "";
 
 
-    // todos 배열의 할 일을 하나씩 화면에 표시
-    todos.forEach(function(todo, index){
+    // todos 배열의 할 일을 하나씩 화면에 표시합니다.
+    todos.forEach(function(todo, index) {
 
         // 새로운 li 요소를 만듭니다.
         const li = document.createElement("li");
 
 
-        
+        // 드래그할 수 있도록 설정합니다.
+        li.draggable = true;
 
 
         // 현재 할 일의 번호를 저장합니다.
@@ -37,7 +38,8 @@ function displayTodos(){
         // 할 일 내용과 삭제 버튼을 넣습니다.
         li.innerHTML = `
             <span>${todo}</span>
-            <button class="delete-btn">삭제</button>`;
+            <button class="delete-btn">삭제</button>
+        `;
 
 
         // 삭제 버튼을 가져옵니다.
@@ -61,79 +63,64 @@ function displayTodos(){
         });
 
 
-        
+        // 드래그를 시작했을 때 실행됩니다.
+        li.addEventListener("dragstart", function(event) {
 
-        
+            li.classList.add("dragging");
+            
+            // 현재 드래그하는 요소의 번호를 저장합니다.
+            event.dataTransfer.setData("text/plain", index);
+
+        });
 
 
-        li.addEventListener("mousedown", function(event){
-            // 삭제 버튼을 누른 경우에는 드래그하지 않습니다.
-            if (event.target.classList.contains("delete-btn")) {
+        li.addEventListener("dragover", function(event){
+            event.preventDefault();
+
+            const draggingli = todoList.querySelector(".dragging");
+
+            if(draggingli === li){
                 return;
             }
 
             const rect = li.getBoundingClientRect();
 
-            const originalWidth = rect.width;
-            const originalHeight = rect.height;
+            const middle = rect.top + rect.height / 2;
 
-            // 마우스가 li의 어느 부분을 잡았는지 계산합니다.
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
-
-            // li를 마우스를 따라가도록 이동합니다.
-            li.style.position = "fixed";
-            li.style.left = rect.left + "px";
-            li.style.top = rect.top + "px";
-            
-
-            function move(event) {
-
-                li.style.left = (event.clientX - offsetX) + "px";
-                li.style.top = (event.clientY - offsetY) + "px";
-
-                
-
-                const target = document.elementFromPoint(
-                    event.clientX,
-                    event.clientY
-                );
-
-                const targetLi = target ? target.closest("li") : null;
-
-                if(targetLi && targetLi !== li){
-                    const targetRect = targetLi.getBoundingClientRect();
-
-                    const targetMiddle = targetRect.top + targetRect.height / 2;
-
-                    if(event.clientY < targetMiddle){
-                        todoList.inserBefore(li, targetLi);
-                    } else {
-                        todolist.inserBefore(li, targetLi.nextSibling);
-                    }
-                }
+            if(event.clientY < middle){
+                todoList.insertBefore(draggingli,li);
+            }else{
+                todoList.insertBefore(draggingli, li.nextSibling);
             }
-               
-            
-            function(stop){
-                const items = todolist.querySelectorAll("li");
-                
-                const newTodos = [];
+        });
 
-                items.forEach(function(item){
-                    const text = item.querySeletor("span")
-                });
+        li.addEventListener("dragend", function(){
+            li.classList.remove("dragging");
 
-            }
-        
-            
+            const items = todoList.querySelectorAll("li");
+
+            const newTodos = [];
+
+            items.forEach(function(item){
+                const text = item.querySelector("span").textContent;
+
+                newTodos.push(text);
+            });
+
+            todos = newTodos;
+
+            saveTodos();
+        });
+
+
         // li를 목록에 추가합니다.
         todoList.appendChild(li);
 
-        });
-        });
+    });
+}
 
-    }
+
+
 // localStorage에 할 일을 저장하는 함수
 function saveTodos() {
 
