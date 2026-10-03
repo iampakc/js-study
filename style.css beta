@@ -134,6 +134,8 @@ li{
 
     border-radius:5px;
 
+    transition: transform 0.2s ease; 
+
 }
 
 
@@ -147,22 +149,17 @@ li{
 }
 
 li {
-    cursor: grab;
-    transition: left 0.15s ease, top 0.15s ease;
+  cursor: grab;
+  /* 할 일을 드래그할 수 있다는 것을 보여주는 마우스 모양입니다. */
 }
+
 
 li:active {
-    cursor: grabbing;
+  cursor: grabbing;
+  /* 할 일을 실제로 잡고 드래그할 때의 마우스 모양입니다. */
 }
 
-li {
-    padding: 10px;
-    margin: 5px;
-    background: white;
-    cursor: grab;
-    transition: left 0.15s ease, top 0.15s ease;
-}
-
-li:active {
+li.dragging{
+    opacity: 1.0;
     cursor: grabbing;
 }
