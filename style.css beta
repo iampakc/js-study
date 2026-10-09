@@ -134,8 +134,9 @@ li{
 
     border-radius:5px;
 
-    transition: transform 0.2s ease; 
+    cursor: grab;
 
+    transition: transform 0.2s ease;
 }
 
 
@@ -160,6 +161,18 @@ li:active {
 }
 
 li.dragging{
-    opacity: 1.0;
+    position: fixed;
+    z-index: 1000;
+    opacity: 0.9;
+    transition: none;
+    pointer-events: none;
     cursor: grabbing;
+}
+
+li.drag-placeholder{
+    box-sizing: border-box;
+    background: #ddd;
+    border: 2px dashed #add;
+
+    border-radius: 5px;
 }
