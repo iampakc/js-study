@@ -19,17 +19,53 @@ function displayTodos() {
     // 기존 목록을 모두 삭제합니다.
     todoList.innerHTML = "";
 
+    function getPosition() {
+        const positions = new Map();
+        todoList.querySelectorAll("li:not(.dragging):not(.drag-placeholder)")
+        .forEach(function(item){
+            positions.set(
+                item,
+                item.getBoundingClientRect().top
+            );
+        });
+        return positions;
+    }
+
+    function animateMovement(oldPositions) {
+
+        todoList.querySelectorAll("li:not(.dragging):not(.drag-placeholder)")
+        .forEach(function(item) {
+            const oldTop = oldPositions.get(item);
+            
+            if(oldTop === undefined){
+                return;
+            }
+            const newTop = item.getBoundingClientRect().top;
+            const distance = oldTop - newTop;
+
+            if(distance === 0){
+                return;
+            }
+
+            item.style.transition = "none";
+            item.style.transform = "translateY(" + distance + "px)";
+
+            item.getBoundingClientRect();
+
+            requestAnimationFrame(function(){
+                item.style.transition = "";
+                item.style.transform = "";
+            });
+
+                
+        });
+    }
 
     // todos 배열의 할 일을 하나씩 화면에 표시합니다.
     todos.forEach(function(todo, index) {
 
         // 새로운 li 요소를 만듭니다.
         const li = document.createElement("li");
-
-
-        // 드래그할 수 있도록 설정합니다.
-        li.draggable = true;
-
 
         // 현재 할 일의 번호를 저장합니다.
         li.dataset.index = index;
@@ -40,6 +76,8 @@ function displayTodos() {
             <span>${todo}</span>
             <button class="delete-btn">삭제</button>
         `;
+
+        li.querySelector("span").textContent = todo;
 
 
         // 삭제 버튼을 가져옵니다.
@@ -66,50 +104,55 @@ function displayTodos() {
         // 드래그를 시작했을 때 실행됩니다.
         li.addEventListener("dragstart", function(event) {
 
-            li.classList.add("dragging");
-            
             // 현재 드래그하는 요소의 번호를 저장합니다.
             event.dataTransfer.setData("text/plain", index);
 
         });
 
 
-        li.addEventListener("dragover", function(event){
+        // 다른 할 일 위에 드래그하고 있을 때 실행됩니다.
+        li.addEventListener("dragover", function(event) {
+
+            // 기본 동작을 막아서 드롭할 수 있도록 합니다.
             event.preventDefault();
 
-            const draggingli = todoList.querySelector(".dragging");
+        });
 
-            if(draggingli === li){
+
+        // 다른 할 일 위에 놓았을 때 실행됩니다.
+        li.addEventListener("drop", function(event) {
+
+            // 드래그했던 할 일의 위치를 가져옵니다.
+            const oldIndex = Number(
+                event.dataTransfer.getData("text/plain")
+            );
+
+
+            // 현재 놓은 위치를 가져옵니다.
+            const newIndex = Number(li.dataset.index);
+
+
+            // 같은 위치에 놓았다면 아무것도 하지 않습니다.
+            if (oldIndex === newIndex) {
                 return;
             }
 
-            const rect = li.getBoundingClientRect();
 
-            const middle = rect.top + rect.height / 2;
+            // 드래그한 할 일을 배열에서 꺼냅니다.
+            const draggedTodo = todos.splice(oldIndex, 1)[0];
 
-            if(event.clientY < middle){
-                todoList.insertBefore(draggingli,li);
-            }else{
-                todoList.insertBefore(draggingli, li.nextSibling);
-            }
-        });
 
-        li.addEventListener("dragend", function(){
-            li.classList.remove("dragging");
+            // 새로운 위치에 할 일을 넣습니다.
+            todos.splice(newIndex, 0, draggedTodo);
 
-            const items = todoList.querySelectorAll("li");
 
-            const newTodos = [];
-
-            items.forEach(function(item){
-                const text = item.querySelector("span").textContent;
-
-                newTodos.push(text);
-            });
-
-            todos = newTodos;
-
+            // 변경된 순서를 저장합니다.
             saveTodos();
+
+
+            // 화면을 다시 표시합니다.
+            displayTodos();
+
         });
 
 
