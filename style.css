@@ -134,6 +134,9 @@ li{
 
     border-radius:5px;
 
+    cursor: grab;
+
+    transition: transform 0.2s ease;
 }
 
 
@@ -155,4 +158,28 @@ li {
 li:active {
   cursor: grabbing;
   /* 할 일을 실제로 잡고 드래그할 때의 마우스 모양입니다. */
+}
+
+li.dragging{
+    position: fixed;
+    z-index: 1000;
+    opacity: 0.9;
+    transition: none;
+    pointer-events: none;
+    cursor: grabbing;
+}
+
+li.drag-placeholder{
+    box-sizing: border-box;
+    background: #ddd;
+    border: 2px dashed #add;
+
+    border-radius: 5px;
+}
+
+#todoCount{
+    text-align:left;
+    margin-top:10px;
+    font-size: 14px;
+    color: #666;
 }
