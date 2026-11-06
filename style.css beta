@@ -176,3 +176,23 @@ li.drag-placeholder{
 
     border-radius: 5px;
 }
+
+#todoCount{
+    text-align:left;
+    margin-top:10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.search-area{
+    margin: 10px;
+}
+
+#searchInput{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
