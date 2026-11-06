@@ -1,13 +1,14 @@
-
 const input = document.getElementById("todoInput");
 const addBtn = document.getElementById("addBtn");
 const todoList = document.getElementById("todoList");
+const todoCount = document.getElementById("todoCount");
+const todotext = document.getElementById("searchInput");
 
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 function displayTodos() {
     todoList.innerHTML = "";
-
+    todoCount.textContent = "목록:" + todos.length + " / 5";
     function getPositions() {
         const positions = new Map();
 
@@ -66,7 +67,8 @@ function displayTodos() {
         const deleteBtn = li.querySelector(".delete-btn");
 
         deleteBtn.addEventListener("click", function() {
-            todos.splice(index, 1);
+            const currentIndex = Array.from(todoList.children).indexOf(li);
+            todos.splice(currentIndex, 1);
             saveTodos();
             displayTodos();
         });
@@ -198,6 +200,19 @@ function displayTodos() {
 
         todoList.appendChild(li);
     });
+    const keyword = searchInput.value.trim().toLowerCase();
+
+    const items = todoList.querySelectorAll("li");
+
+    items.forEach(function(item){
+        const todoText = item.querySelector("span").textContent.toLowerCase();
+
+        if(todoText.includes(keyword)) {
+            item.style.display = "flex";
+        }else{
+            item.style.display = "none";
+        }
+    })
 }
 
 function saveTodos() {
@@ -211,14 +226,14 @@ function addTodo() {
         return;
     }
 
+    if(todos.length >= 5){
+        alert("최대 5개까지의 목록만 추가 가능합니다.");
+        return;
+    }
     todos.push(todoText);
-
     saveTodos();
-
     displayTodos();
-
     input.value = "";
-
     input.focus();
 }
 
@@ -228,6 +243,25 @@ input.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         addTodo();
     }
+});
+
+searchInput.addEventListener("input",function() {
+
+    const keyword = searchInput.value.trim().toLowerCase();
+    
+    const items = todoList.querySelectorAll("li:not(.drag-placeholder)");
+
+    items.forEach(function(item){
+
+        const todoText = item.querySelector("span").textContent.toLowerCase();
+
+        if(todoText.includes(keyword)) {
+            item.style.display = "flex";
+        } else{
+            item.style.display = "none";
+        }
+
+    });
 });
 
 displayTodos();
